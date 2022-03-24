@@ -6,9 +6,12 @@ import { TYPES } from '../types';
 import { ILogger } from '../logger/logger.interface';
 import 'reflect-metadata';
 import { IUserController } from './user.controller.interface';
+import { UserLoginDto } from "./dto/user-login.dto";
+import { UserRegisterDto } from "./dto/user-register.dto";
 
 @injectable()
 export class UserController extends BaseController implements IUserController {
+
 	constructor(@inject(TYPES.ILogger) private loggerService: ILogger) {
 		super(loggerService);
 		this.bindRoutes([
@@ -17,11 +20,13 @@ export class UserController extends BaseController implements IUserController {
 		]);
 	}
 
-	login(req: Request, res: Response, next: NextFunction): void {
+	login(req: Request<{}, {}, UserLoginDto>, res: Response, next: NextFunction): void {
+		console.log(req.body);
 		next(new HTTPError(401, 'User is not authorized', 'login'));
 	}
 
-	register(req: Request, res: Response): void {
+	register(req: Request<{}, {}, UserRegisterDto>, res: Response): void {
+		console.log(req.body);
 		this.ok(res, 'register');
 	}
 }
