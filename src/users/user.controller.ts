@@ -8,11 +8,16 @@ import 'reflect-metadata';
 import { IUserController } from './user.controller.interface';
 import { UserLoginDto } from "./dto/user-login.dto";
 import { UserRegisterDto } from "./dto/user-register.dto";
+import {UserService} from "./users.service";
+import {IUserService} from "./users.service.interface";
 
 @injectable()
 export class UserController extends BaseController implements IUserController {
 
-	constructor(@inject(TYPES.ILogger) private loggerService: ILogger) {
+	constructor(
+		@inject(TYPES.ILogger) private loggerService: ILogger,
+		@inject(TYPES.UserService) private userService: IUserService,
+	) {
 		super(loggerService);
 		this.bindRoutes([
 			{ path: '/register', method: 'post', func: this.register },
@@ -21,12 +26,16 @@ export class UserController extends BaseController implements IUserController {
 	}
 
 	login(req: Request<{}, {}, UserLoginDto>, res: Response, next: NextFunction): void {
-		console.log(req.body);
 		next(new HTTPError(401, 'User is not authorized', 'login'));
 	}
 
-	register(req: Request<{}, {}, UserRegisterDto>, res: Response): void {
-		console.log(req.body);
-		this.ok(res, 'register');
+	async register(
+		{ body }: Request<{}, {}, UserRegisterDto>,
+		res: Response,
+		next: NextFunction
+	): Promise<void> {
+		const result = await this.userService.createUser(body);
+		if (!result) { return next(new HTTPError(422, 'User with these credentials already exists'));}
+		this.ok(res, { email: result.email});
 	}
 }
