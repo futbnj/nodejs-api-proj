@@ -6,15 +6,14 @@ import { TYPES } from '../types';
 import { ILogger } from '../logger/logger.interface';
 import 'reflect-metadata';
 import { IUserController } from './user.controller.interface';
-import { UserLoginDto } from "./dto/user-login.dto";
-import { UserRegisterDto } from "./dto/user-register.dto";
-import {UserService} from "./users.service";
-import {IUserService} from "./users.service.interface";
-import {ValidateMiddleware} from "../common/validate.middleware";
+import { UserLoginDto } from './dto/user-login.dto';
+import { UserRegisterDto } from './dto/user-register.dto';
+import { UserService } from './users.service';
+import { IUserService } from './users.service.interface';
+import { ValidateMiddleware } from '../common/validate.middleware';
 
 @injectable()
 export class UserController extends BaseController implements IUserController {
-
 	constructor(
 		@inject(TYPES.ILogger) private loggerService: ILogger,
 		@inject(TYPES.UserService) private userService: IUserService,
@@ -25,7 +24,7 @@ export class UserController extends BaseController implements IUserController {
 				path: '/register',
 				method: 'post',
 				func: this.register,
-				middlewares: [new ValidateMiddleware(UserRegisterDto)]
+				middlewares: [new ValidateMiddleware(UserRegisterDto)],
 			},
 			{ path: '/login', method: 'post', func: this.login },
 		]);
@@ -38,10 +37,12 @@ export class UserController extends BaseController implements IUserController {
 	async register(
 		{ body }: Request<{}, {}, UserRegisterDto>,
 		res: Response,
-		next: NextFunction
+		next: NextFunction,
 	): Promise<void> {
 		const result = await this.userService.createUser(body);
-		if (!result) { return next(new HTTPError(422, 'User with these credentials already exists'));}
-		this.ok(res, { email: result.email});
+		if (!result) {
+			return next(new HTTPError(422, 'User with these credentials already exists'));
+		}
+		this.ok(res, { email: result.email });
 	}
 }
