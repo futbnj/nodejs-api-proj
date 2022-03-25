@@ -8,8 +8,8 @@ import 'reflect-metadata';
 import { json } from 'body-parser';
 import { IConfigService } from './config/config.service.interface';
 import { IExceptionFilter } from './errors/exception.filter.interface';
-import {PrismaService} from "./db/prisma.service";
-import {AuthMiddleware} from "./common/auth.middleware";
+import { PrismaService } from './db/prisma.service';
+import { AuthMiddleware } from './common/auth.middleware';
 
 @injectable()
 export class App {

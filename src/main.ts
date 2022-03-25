@@ -11,9 +11,9 @@ import { IUserService } from './users/users.service.interface';
 import { UserService } from './users/users.service';
 import { IConfigService } from './config/config.service.interface';
 import { ConfigService } from './config/config.service';
-import {PrismaService} from "./db/prisma.service";
-import {IUsersRepository} from "./users/users.repository.interface";
-import {UsersRepository} from "./users/users.repository";
+import { PrismaService } from './db/prisma.service';
+import { IUsersRepository } from './users/users.repository.interface';
+import { UsersRepository } from './users/users.repository';
 
 export interface IBootstrap {
 	app: App;
